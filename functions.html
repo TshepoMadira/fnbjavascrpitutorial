@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1 id="heading" onclick="changeText()">Innocent</h1>
+    <p id="addiction"></p>
+</body>
+<script>
+    document.getElementById("addiction").innerHTML = addNumbers(2, 20);
+    function changeText() {
+        if (document.getElementById("heading").innerHTML == 'Innocent') {
+
+
+
+
+            document.getElementById("heading").innerHTML = 'Wow'
+        } else {
+            document.getElementById("heading").innerHTML = 'Innocent'
+        }
+
+    }
+    function addNumbers(num1, num2) {
+        return num1 + num2;
+    }
+</script>
+
+</html>

@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <p>Welcome Please Sign in</p>
+    <form id="loginForm">
+        <label for="usernameInput">Username:</label>
+        <input type="text" id="usernameInput" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="passwordInput" id="passwordInput" name="password" required>
+        <p id="errorMessage" style="color: red;"></p>
+        <br>
+        <button type="button" onclick="verifyUser()">Login</button>
+        <script>
+            function verifyUser() {
+                var username = document.getElementById("usernameInput").value;
+                var password = document.getElementById("passwordInput").value;
+  
+                checkuserCreds(username, password);
+            }
+
+            function checkuserCreds(username, password){
+                var systemUsername = "Bond";
+                var systemPassword = "007";
+
+                if (username == systemUsername && password == systemPassword) {
+                    document.getElementById("errorMessage").innerHTML = "Access Granted!";
+                } else {
+                    document.getElementById("errorMessage").innerHTML = "Access Denied! Please try again.";
+                }
+
+            }
+
+
+        </script>
+
+</body>
+
+</html>
