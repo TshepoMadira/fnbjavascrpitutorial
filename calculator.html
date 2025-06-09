@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Calculator</title>
+   
+</head>
+<body>
+    <table>
+        <tr>
+            <td colspan="4">
+                <input type="text" id="inputBox" value="0" readonly />
+            </td>
+        </tr>
+        <tr>
+            <td class='digitButton' onclick="digitBtnPressed('7')">7</td>
+            <td class='digitButton' onclick="digitBtnPressed('8')">8</td>
+            <td class='digitButton' onclick="digitBtnPressed('9')">9</td>
+            <td class='operatorButton' onclick="operatorBtnPressed('*')">×</td>
+        </tr>
+        <tr>
+            <td class='digitButton' onclick="digitBtnPressed('4')">4</td>
+            <td class='digitButton' onclick="digitBtnPressed('5')">5</td>
+            <td class='digitButton' onclick="digitBtnPressed('6')">6</td>
+            <td class='operatorButton'  onclick="operatorBtnPressed('-')">-</td>
+        </tr>
+        <tr>
+            <td class='digitButton' onclick="digitBtnPressed('1')">1</td>
+            <td class='digitButton' onclick="digitBtnPressed('2')">2</td>
+            <td class='digitButton' onclick="digitBtnPressed('3')">3</td>
+            <td class='operatorButton'  onclick="operatorBtnPressed('+')">+</td>
+        </tr>
+        <tr>
+            <td class='digitButton' colspan="2" onclick="digitBtnPressed('0')">0</td>
+            <td class='ACbutton' onclick="clearBtnPressed()">AC</td>
+            <td class='operatorButton'  onclick="operatorBtnPressed('/')">/</td>
+        </tr>
+        <tr>
+            <td class='operatorButton' colspan="4" onclick="equalsBtnPressed()">=</td>
+        </tr>
+    </table>
+
+    <script>
+        let firstOperand = null;
+        let operator = null;
+        let waitingForSecondOperand = false;
+
+        const inputBox = document.getElementById("inputBox");
+
+        function digitBtnPressed(digit) {
+            if (waitingForSecondOperand) {
+                inputBox.value = digit;
+                waitingForSecondOperand = false;
+            } else {
+                inputBox.value = inputBox.value === '0' ? digit : inputBox.value + digit;
+            }
+        }
+
+        function operatorBtnPressed(op) {
+            const inputValue = parseFloat(inputBox.value);
+
+            if (firstOperand === null) {
+                firstOperand = inputValue;
+            } else if (operator && !waitingForSecondOperand) {
+                
+                const result = performCalculation();
+                inputBox.value = String(result);
+                firstOperand = result;
+            }
+
+            waitingForSecondOperand = true;
+            operator = op;
+        }
+
+        function equalsBtnPressed() {
+            if (operator === null || waitingForSecondOperand) {
+                return;
+            }
+
+            const result = performCalculation();
+            inputBox.value = String(result);
+            firstOperand = result;
+            waitingForSecondOperand = true;
+            operator = null;
+        }
+
+        function performCalculation() {
+            const inputValue = parseFloat(inputBox.value);
+
+            switch (operator) {
+                case '+':
+                    return firstOperand + inputValue;
+                case '-':
+                    return firstOperand - inputValue;
+                case '*':
+                    return firstOperand * inputValue;
+                case '/':
+                    if (inputValue === 0) {
+                        alert("Cannot divide by zero!");
+                        return 0;
+                    }
+                    return firstOperand / inputValue;
+                default:
+                    return inputValue;
+            }
+        }
+
+        function clearBtnPressed() {
+            inputBox.value = '0';
+            firstOperand = null;
+            operator = null;
+            waitingForSecondOperand = false;
+        }
+    </script>
+</body>
+</html>
