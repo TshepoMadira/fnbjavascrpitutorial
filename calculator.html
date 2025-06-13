@@ -1,43 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
-    <title>Calculator</title>
-   
+    <title>Enhanced Calculator</title>
+
 </head>
+
 <body>
     <table>
         <tr>
-            <td colspan="4">
+            <td colspan="5">
                 <input type="text" id="inputBox" value="0" readonly />
             </td>
+        </tr>
+        <tr>
+            <td class='functionButton' onclick="sqrtPressed()">√</td>
+            <td class='functionButton' onclick="power2Pressed()">x²</td>
+            <td class='functionButton' onclick="power3Pressed()">x³</td>
+            <td class='ACbutton' onclick="clearBtnPressed()">AC</td>
+            <td class='operatorButton' onclick="operatorBtnPressed('/')">/</td>
         </tr>
         <tr>
             <td class='digitButton' onclick="digitBtnPressed('7')">7</td>
             <td class='digitButton' onclick="digitBtnPressed('8')">8</td>
             <td class='digitButton' onclick="digitBtnPressed('9')">9</td>
             <td class='operatorButton' onclick="operatorBtnPressed('*')">×</td>
+            <td class='operatorButton' onclick="percentagePressed()">%</td>
         </tr>
         <tr>
             <td class='digitButton' onclick="digitBtnPressed('4')">4</td>
             <td class='digitButton' onclick="digitBtnPressed('5')">5</td>
             <td class='digitButton' onclick="digitBtnPressed('6')">6</td>
-            <td class='operatorButton'  onclick="operatorBtnPressed('-')">-</td>
+            <td class='operatorButton' onclick="operatorBtnPressed('-')">-</td>
+            <td class='functionButton' onclick="toggleSign()">±</td>
         </tr>
         <tr>
             <td class='digitButton' onclick="digitBtnPressed('1')">1</td>
             <td class='digitButton' onclick="digitBtnPressed('2')">2</td>
             <td class='digitButton' onclick="digitBtnPressed('3')">3</td>
-            <td class='operatorButton'  onclick="operatorBtnPressed('+')">+</td>
+            <td class='operatorButton' onclick="operatorBtnPressed('+')">+</td>
+            <td class='functionButton' onclick="decimalPressed()">.</td>
         </tr>
         <tr>
             <td class='digitButton' colspan="2" onclick="digitBtnPressed('0')">0</td>
-            <td class='ACbutton' onclick="clearBtnPressed()">AC</td>
-            <td class='operatorButton'  onclick="operatorBtnPressed('/')">/</td>
-        </tr>
-        <tr>
-            <td class='operatorButton' colspan="4" onclick="equalsBtnPressed()">=</td>
+            <td class='functionButton' onclick="backspacePressed()">⌫</td>
+            <td class='operatorButton' colspan="2" onclick="equalsBtnPressed()">=</td>
         </tr>
     </table>
 
@@ -57,13 +66,24 @@
             }
         }
 
+        function decimalPressed() {
+            if (waitingForSecondOperand) {
+                inputBox.value = '0.';
+                waitingForSecondOperand = false;
+                return;
+            }
+
+            if (!inputBox.value.includes('.')) {
+                inputBox.value += '.';
+            }
+        }
+
         function operatorBtnPressed(op) {
             const inputValue = parseFloat(inputBox.value);
 
             if (firstOperand === null) {
                 firstOperand = inputValue;
             } else if (operator && !waitingForSecondOperand) {
-                
                 const result = performCalculation();
                 inputBox.value = String(result);
                 firstOperand = result;
@@ -98,9 +118,11 @@
                 case '/':
                     if (inputValue === 0) {
                         alert("Cannot divide by zero!");
-                        return 0;
+                        return firstOperand;
                     }
                     return firstOperand / inputValue;
+                case '%':
+                    return firstOperand % inputValue;
                 default:
                     return inputValue;
             }
@@ -112,6 +134,51 @@
             operator = null;
             waitingForSecondOperand = false;
         }
+
+        function sqrtPressed() {
+            const value = parseFloat(inputBox.value);
+            if (value < 0) {
+                alert("Cannot calculate square root of negative number!");
+                return;
+            }
+            inputBox.value = String(Math.sqrt(value));
+            waitingForSecondOperand = true;
+        }
+
+        function power2Pressed() {
+            const value = parseFloat(inputBox.value);
+            inputBox.value = String(Math.pow(value, 2));
+            waitingForSecondOperand = true;
+        }
+
+        function power3Pressed() {
+            const value = parseFloat(inputBox.value);
+            inputBox.value = String(Math.pow(value, 3));
+            waitingForSecondOperand = true;
+        }
+
+        function percentagePressed() {
+            if (operator && !waitingForSecondOperand) {
+                const inputValue = parseFloat(inputBox.value);
+                inputBox.value = String((firstOperand * inputValue) / 100);
+            } else {
+                inputBox.value = String(parseFloat(inputBox.value) / 100);
+            }
+            waitingForSecondOperand = true;
+        }
+
+        function toggleSign() {
+            inputBox.value = String(parseFloat(inputBox.value) * -1);
+        }
+
+        function backspacePressed() {
+            if (inputBox.value.length === 1 || (inputBox.value.length === 2 && inputBox.value.startsWith('-'))) {
+                inputBox.value = '0';
+            } else {
+                inputBox.value = inputBox.value.slice(0, -1);
+            }
+        }
     </script>
 </body>
+
 </html>

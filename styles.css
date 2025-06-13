@@ -54,3 +54,21 @@ input[type="text"] {
 .ACButton {
     background-color: #656165;
 }
+
+.operatorButton:hover {
+    background-color: #e09b00;
+}
+.ACbutton {
+    background-color: #ff6b6b;
+    color: white;
+}
+.ACbutton:hover {
+    background-color: #e05b5b;
+}
+.functionButton {
+    background-color: #4ecdc4;
+    color: white;
+}
+.functionButton:hover {
+    background-color: #3ebbb4;
+}
